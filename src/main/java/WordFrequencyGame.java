@@ -3,12 +3,12 @@ import java.util.*;
 public class WordFrequencyGame {
 
     public static final String BLANK_SPACE = "\\s+";
-    public static final int INITIAL_COUNT = 1;
+    public static final int INITIAL_WORD_COUNT = 1;
 
     public String getResult(String sentence) {
 
 
-        if (sentence.split(BLANK_SPACE).length == INITIAL_COUNT) {
+        if (isSingleWord(sentence)) {
             return sentence + " 1";
         } else {
 
@@ -32,13 +32,17 @@ public class WordFrequencyGame {
         }
     }
 
+    private boolean isSingleWord(String sentence) {
+        return sentence.split(BLANK_SPACE).length == INITIAL_WORD_COUNT;
+    }
+
     private List<WordInfo> getWordInfos(String sentence) {
         //split the input string with 1 to n pieces of spaces
         String[] words = sentence.split(BLANK_SPACE);
 
         List<WordInfo> wordInfoList = new ArrayList<>();
         for (String word : words) {
-            WordInfo wordInfo = new WordInfo(word, INITIAL_COUNT);
+            WordInfo wordInfo = new WordInfo(word, INITIAL_WORD_COUNT);
             wordInfoList.add(wordInfo);
         }
 
