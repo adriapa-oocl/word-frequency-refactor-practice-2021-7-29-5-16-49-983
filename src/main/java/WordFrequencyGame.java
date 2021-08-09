@@ -7,28 +7,22 @@ public class WordFrequencyGame {
 
     public String getResult(String sentence) {
 
-
         if (isSingleWord(sentence)) {
             return sentence + " 1";
-        } else {
+        }
+        try {
+            List<WordInfo> wordInfoList = getWordInfos(sentence);
 
-            try {
+            wordInfoList.sort((w1, w2) -> w2.getWordCount() - w1.getWordCount());
 
-                List<WordInfo> wordInfoList = getWordInfos(sentence);
-
-                wordInfoList.sort((w1, w2) -> w2.getWordCount() - w1.getWordCount());
-
-                StringJoiner joiner = new StringJoiner("\n");
-                for (WordInfo w : wordInfoList) {
-                    String s = w.getWord() + " " + w.getWordCount();
-                    joiner.add(s);
-                }
-                return joiner.toString();
-            } catch (Exception e) {
-
-
-                return "Calculate Error";
+            StringJoiner joiner = new StringJoiner("\n");
+            for (WordInfo w : wordInfoList) {
+                String s = w.getWord() + " " + w.getWordCount();
+                joiner.add(s);
             }
+            return joiner.toString();
+        } catch (Exception e) {
+            return "Calculate Error";
         }
     }
 
