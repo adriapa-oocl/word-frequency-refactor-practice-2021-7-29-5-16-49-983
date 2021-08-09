@@ -13,16 +13,10 @@ public class WordFrequencyGame {
         }
         try {
 
-            List<WordInfo> wordInfoList = calculateWordFrequency(sentence);
+            String[] words = sentence.split(BLANK_SPACE);
 
-            wordInfoList.sort((w1, w2) -> w2.getWordCount() - w1.getWordCount());
-
-            StringJoiner joiner = new StringJoiner("\n");
-            for (WordInfo w : wordInfoList) {
-                String s = w.getWord() + " " + w.getWordCount();
-                joiner.add(s);
-            }
-            return joiner.toString();
+            List<WordInfo> wordFrequencies = calculateWordFrequency(words);
+            return consolidateWordFrequencies(wordFrequencies);
         } catch (Exception e) {
             return "Calculate Error";
         }
@@ -32,17 +26,25 @@ public class WordFrequencyGame {
         return sentence.split(BLANK_SPACE).length == INITIAL_WORD_COUNT;
     }
 
-    private List<WordInfo> calculateWordFrequency(String sentence) {
-        List<String> words = Arrays.asList(sentence.split(BLANK_SPACE));
-        List<String> distinctWords = words.stream().distinct().collect(Collectors.toList());
-
-        List<WordInfo> wordInfos = new ArrayList<>();
+    private List<WordInfo> calculateWordFrequency(String[] words) {
+        List<String> distinctWords = Arrays.stream(words).distinct().collect(Collectors.toList());
+        List<WordInfo> wordInfo = new ArrayList<>();
         distinctWords.forEach(distinctWord -> {
-            int wordCount = (int) words.stream().filter(word -> word.equals(distinctWord)).count();
-            wordInfos.add(new WordInfo(distinctWord, wordCount));
+            int wordCount = (int) Arrays.stream(words).filter(word -> word.equals(distinctWord)).count();
+            wordInfo.add(new WordInfo(distinctWord, wordCount));
         });
+        return wordInfo;
+    }
 
-        return wordInfos;
+    private String consolidateWordFrequencies(List<WordInfo> wordFrequencies) {
+        wordFrequencies.sort((w1, w2) -> w2.getWordCount() - w1.getWordCount());
+
+        StringJoiner joiner = new StringJoiner("\n");
+        for (WordInfo w : wordFrequencies) {
+            String s = w.getWord() + " " + w.getWordCount();
+            joiner.add(s);
+        }
+        return joiner.toString();
     }
 
 }
