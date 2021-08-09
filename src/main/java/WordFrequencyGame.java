@@ -12,9 +12,7 @@ public class WordFrequencyGame {
             return sentence + " 1";
         }
         try {
-
             String[] words = sentence.split(BLANK_SPACE);
-
             List<WordInfo> wordFrequencies = calculateWordFrequency(words);
             return consolidateWordFrequencies(wordFrequencies);
         } catch (Exception e) {
@@ -30,21 +28,20 @@ public class WordFrequencyGame {
         List<String> distinctWords = Arrays.stream(words).distinct().collect(Collectors.toList());
         List<WordInfo> wordInfo = new ArrayList<>();
         distinctWords.forEach(distinctWord -> {
-            int wordCount = (int) Arrays.stream(words).filter(word -> word.equals(distinctWord)).count();
+            int wordCount = (int) Arrays.stream(words)
+                    .filter(word -> word.equals(distinctWord))
+                    .count();
             wordInfo.add(new WordInfo(distinctWord, wordCount));
         });
         return wordInfo;
     }
 
     private String consolidateWordFrequencies(List<WordInfo> wordFrequencies) {
-        wordFrequencies.sort((w1, w2) -> w2.getWordCount() - w1.getWordCount());
-
-        StringJoiner joiner = new StringJoiner("\n");
-        for (WordInfo w : wordFrequencies) {
-            String s = w.getWord() + " " + w.getWordCount();
-            joiner.add(s);
-        }
-        return joiner.toString();
+        return wordFrequencies
+                .stream()
+                .sorted((firstWord, secondWord) -> secondWord.getCount() - firstWord.getCount())
+                .map(word -> word.getWord() + " " + word.getCount())
+                .collect(Collectors.joining("\n"));
     }
 
 }
